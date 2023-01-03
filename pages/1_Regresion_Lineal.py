@@ -24,30 +24,30 @@ if archivo is not None:
         variableY = st.selectbox("Seleccione la variable **dependiente**", datos.keys())
 
     st.write("### PREDICCION")
-    prediccion = st.number_input("Valor a predecir")
-
-    #analizando los datos
-    puntosX = np.asarray(datos[variableX]).reshape(-1, 1)
-    puntosY = datos[variableY]
-
-    #regresion lineal
-    regre = LinearRegression()
-    regre.fit(puntosX, puntosY)
-    predic = regre.predict(puntosX)
-    r2 = r2_score(puntosY, predic)
-    valorPredic = regre.predict([[prediccion]])
-
-    #Graficar
-    grafica = plt.figure()
-    plt.style.use("bmh")
-    plt.scatter(puntosX, puntosY, color="red")
-    plt.plot(puntosX, predic, color="blue")
-    plt.title("Grafica de puntos")
-    plt.xlabel(variableX)
-    plt.ylabel(variableY)
+    prediccion = st.number_input("Valor a predecir", None, None, 0, 1)  #label, min, max, value, step
 
     #mostrar imagen
     if st.button('Analizar datos'):
+        # analizando los datos
+        puntosX = np.asarray(datos[variableX]).reshape(-1, 1)
+        puntosY = datos[variableY]
+
+        # regresion lineal
+        regre = LinearRegression()
+        regre.fit(puntosX, puntosY)
+        predic = regre.predict(puntosX)
+        r2 = r2_score(puntosY, predic)
+        valorPredic = regre.predict([[prediccion]])
+
+        # Graficar
+        grafica = plt.figure()
+        plt.style.use("bmh")
+        plt.scatter(puntosX, puntosY, color="red")
+        plt.plot(puntosX, predic, color="blue")
+        plt.title("Grafica de puntos")
+        plt.xlabel(variableX)
+        plt.ylabel(variableY)
+
         st.write("## Gráfica")
         st.pyplot(grafica)
 

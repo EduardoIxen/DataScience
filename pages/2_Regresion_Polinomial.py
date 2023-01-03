@@ -28,44 +28,45 @@ if archivo is not None:
         st.write("Variable dependiente Y")
         variableY = st.selectbox("Seleccione la variable dependiente", datos.keys())
 
-    st.write("Grado de la función")
-    grado = st.radio("Seleccione el grado del modelo", (2,3,4,5), horizontal=True)
+    st.write("## Grado de la función")
+    grado = prediccion = st.number_input("Ingrese el grado de la función", None, None, 0, 1)
+    #grado = st.radio("Seleccione el grado del modelo", (2,3,4,5), horizontal=True)
 
     st.write("## Predicción")
     prediccion = st.number_input("Valor a predecir", None, None, 0, 1)
 
-    #Comenzando a analizar la informacion
-    puntosX = np.asarray(datos[variableX]).reshape(-1, 1)
-    puntosY = datos[variableY]
-
-    #Configuracion de la regresion polinomial
-    polinomial = PolynomialFeatures(degree=grado)
-    transformacion = polinomial.fit_transform(puntosX)
-
-    #Configuracion de la regresión lineal
-    regresion = LinearRegression()
-    regresion.fit(transformacion, puntosY)
-    predecir = regresion.predict(transformacion)
-    r2 = r2_score(puntosY, predecir)
-
-    #Predicción
-    minX = prediccion
-    maxX = prediccion
-    nuevaX = np.linspace(minX, maxX, 1)[:, np.newaxis]
-    transformacion = polinomial.fit_transform(nuevaX)
-    valorPredecido = regresion.predict(transformacion)
-
-    #Dibujar
-    figura = plt.figure()
-    plt.style.use("bmh")
-    plt.scatter(puntosX, puntosY, color="red")
-    plt.plot(puntosX, predecir, color="blue")
-    plt.title(f"Función Polinomial de grado = {grado}")
-    plt.ylabel(variableY)
-    plt.xlabel(variableX)
-
     #Mostrando la imagen
     if st.button("Analizar entrada"):
+        # Comenzando a analizar la informacion
+        puntosX = np.asarray(datos[variableX]).reshape(-1, 1)
+        puntosY = datos[variableY]
+
+        # Configuracion de la regresion polinomial
+        polinomial = PolynomialFeatures(degree=grado)
+        transformacion = polinomial.fit_transform(puntosX)
+
+        # Configuracion de la regresión lineal
+        regresion = LinearRegression()
+        regresion.fit(transformacion, puntosY)
+        predecir = regresion.predict(transformacion)
+        r2 = r2_score(puntosY, predecir)
+
+        # Predicción
+        minX = prediccion
+        maxX = prediccion
+        nuevaX = np.linspace(minX, maxX, 1)[:, np.newaxis]
+        transformacion = polinomial.fit_transform(nuevaX)
+        valorPredecido = regresion.predict(transformacion)
+
+        # Dibujar
+        figura = plt.figure()
+        plt.style.use("bmh")
+        plt.scatter(puntosX, puntosY, color="red")
+        plt.plot(puntosX, predecir, color="blue")
+        plt.title(f"Función Polinomial de grado = {grado}")
+        plt.ylabel(variableY)
+        plt.xlabel(variableX)
+
         cero = round(regresion.intercept_, 4)
 
         st.write("### Función de tendencia")
