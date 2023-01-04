@@ -1,7 +1,7 @@
 ## Docker pull
 ```
 docker pull eduardoixen/datascience
-``
+```
 
 ### Comando para ejecutar la imagen de docker
 ```
